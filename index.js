@@ -1,9 +1,10 @@
 const algorithm = "ECDSA";
 const curve = "P-256"; // can be "P-256", "P-384", or "P-521"
 const hash = "SHA-256"; // can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+const crypto = window.crypto.subtle || window.crypto;
 
 function generateKey() {
-    return window.crypto.subtle.generateKey({
+    return crypto.generateKey({
         name: algorithm,
         namedCurve: curve
     }, true, ["sign", "verify"]);
@@ -11,21 +12,21 @@ function generateKey() {
 
 function importPrivatePem(pem) {
     let key = b642ab(removeLines(pem));
-    return window.crypto.subtle.importKey("pkcs8", key, {
+    return crypto.importKey("pkcs8", key, {
         name: algorithm,
         namedCurve: curve
     }, true, ["sign"])
 }
 
 function exportPrivatePem(key) {
-    return window.crypto.subtle.exportKey("pkcs8", key.privateKey)
+    return crypto.exportKey("pkcs8", key.privateKey)
     .then(privateKey => {
         return addLines(ab2b64(privateKey));
     });
 }
 
 function sign(privateKey, data) {
-    return window.crypto.subtle.sign({
+    return crypto.sign({
         name: algorithm,
         hash: {
             name: hash
@@ -36,7 +37,7 @@ function sign(privateKey, data) {
 }
 
 function verify(publicKey, data, signature) {
-    return window.crypto.subtle.verify({
+    return crypto.verify({
         name: algorithm,
         hash: {
             name: hash
