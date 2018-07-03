@@ -10,6 +10,14 @@ The [webcrypto-examples](https://diafygi.github.io/webcrypto-examples/) repo has
 - firefox: 60.0.2;
 - safari: 11.1.1;
 - edge: 41.16299.492.0;
+- opera: 54.0;
+
+## Percentage support with latest browsers
+- Sessions **with no key** import / export: 89%;
+- Users **with no** key import / export: 85%;
+
+- Sessions **with** key import / export: 73%;
+- Users **with** key import / export: 65%;
 
 
 
