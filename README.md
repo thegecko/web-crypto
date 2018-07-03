@@ -14,7 +14,7 @@ The [webcrypto-examples](https://diafygi.github.io/webcrypto-examples/) repo has
 
 ## Percentage support with latest browsers
 - Sessions **with no key** import / export: 89%;
-- Users **with no** key import / export: 85%;
+- Users **with no key** import / export: 85%;
 
 - Sessions **with** key import / export: 73%;
 - Users **with** key import / export: 65%;
