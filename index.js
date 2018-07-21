@@ -1,5 +1,5 @@
 const algorithm = "ECDSA";
-const curve = "P-256"; // can be "P-256", "P-384", or "P-521"
+const curve = "P-256"; // can be "P-256", "P-384", or "P-521" - secp256r1
 const hash = "SHA-256"; // can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
 const crypto = window.crypto.subtle || window.crypto.webkitSubtle;
 
