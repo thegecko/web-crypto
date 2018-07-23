@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JWK</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet">
+	<style>
+        html { margin: 0; padding: 0; border: 0; }
+        body { font-family: 'Raleway', sans-serif; color: #d7ecfb; background-color: #072b44; text-align: center; }
+        h1 { font-weight: 400; }
+        strong { font-weight: 600; }
+        #button { font-size: 12px; color: inherit; margin: 20px auto; border: 0px; background-color: #1b679c; height: 30px; padding: 0 30px; border-radius: 4px; text-transform: uppercase; cursor: pointer; outline: none; }
+        #button:hover { background: #2674ab; }
+	</style>
+</head>
+
+<body>
+    <h1><a href="index.html">Web Crypto</a> - <a href="jwk.html">JWK</a></h1>
+    <button onclick="generateKeys();">Generate Key Pair</button>
+
+    <hr/>
+    <h2>Private Key</h2>
+    <textarea id="private-key" rows="8" cols="100">None</textarea>
+    
+    <hr/>
+    <h2>Public Key</h2>
+    <textarea id="public-key" rows="8" cols="100">None</textarea>
+    
+    <hr/>
+    <h2>Data to sign</h2>
+    <textarea id="data" rows="8" cols="100">this is some data I'd like to sign</textarea>
+    <br/>
+    <button onclick="signData();">Sign data</button>
+
+    <hr/>
+    <h2>Signature</h2>
+    <textarea id="signature" rows="8" cols="100">None</textarea>
+    <br/>
+    <button onclick="verifyData();">Verify data</button>
+
+    <script>
+        let keyStore = { privateKey: {}, publicKey: {}, data: [] };
+        
+        const select = (id) => document.querySelector(`#${id}`);
+        const display = (selectorId, data) => select(selectorId).value = data;
+
+        function verifyData() {
+            Promise.resolve(
+                base64Decode(select('signature').value)
+            )
+            .then(signature => checkSignature(
+                signature,
+                keyStore.publicKey,
+                keyStore.data,
+            ))
+            .then(alert)
+            .catch(alert)
+        }
+
+        function signData() {
+            keyStore.data = new TextEncoder().encode(select('data').value);
+
+            signWithPrivateKey(
+                keyStore.privateKey,
+                keyStore.data,
+            )
+            .then(
+                signature => display('signature', ab2b64(signature))
+            );
+        }
+
+        function generateKeys() {
+            genJWKPair().then(
+                ({ privateKey, publicKey }) => {
+                    Promise.all([
+                        exportKey(privateKey).then(data => display('private-key', JSON.stringify(data, '', 2))),
+                        exportKey(publicKey).then(data => display('public-key', JSON.stringify(data, '', 2)))
+                    ])
+                    .catch(alert);
+
+                    keyStore = { privateKey, publicKey };
+                }
+            )
+        }
+    </script>
+
+    <script type="text/javascript" src="jwk.js"></script>
+</body>
+</html>
